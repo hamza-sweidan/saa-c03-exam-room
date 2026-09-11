@@ -1,0 +1,981 @@
+<title>SAA-C03 Exam Room</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F2F5F4; --surface:#FFFFFF; --surface-2:#E9EFED;
+  --ink:#0E1B1A; --muted:#5B6E6C; --faint:#879997;
+  --rule:#D6E0DE; --rule-strong:#B9C8C5;
+  --accent:#0B6E68; --accent-soft:#D7EAE8; --accent-ink:#FFFFFF;
+  --flag:#A2610A; --flag-soft:#F6EAD6;
+  --pass:#1B6E45; --fail:#A83A2C; --fail-soft:#F6E2DE;
+  --shadow:0 1px 2px rgba(14,27,26,.06), 0 8px 24px -18px rgba(14,27,26,.35);
+  --d1:#0B6E68; --d2:#4A6FA5; --d3:#8A5A9B; --d4:#A2610A;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1413; --surface:#131F1E; --surface-2:#1B2827;
+    --ink:#E4ECEA; --muted:#93A6A3; --faint:#6D807D;
+    --rule:#22302E; --rule-strong:#33443F;
+    --accent:#39B3AA; --accent-soft:#0F2E2C; --accent-ink:#05201E;
+    --flag:#DFA451; --flag-soft:#2E2415;
+    --pass:#46BE7A; --fail:#DE6E59; --fail-soft:#33201C;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -20px rgba(0,0,0,.9);
+    --d1:#39B3AA; --d2:#7FA3D8; --d3:#B98FC9; --d4:#DFA451;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1413; --surface:#131F1E; --surface-2:#1B2827;
+  --ink:#E4ECEA; --muted:#93A6A3; --faint:#6D807D;
+  --rule:#22302E; --rule-strong:#33443F;
+  --accent:#39B3AA; --accent-soft:#0F2E2C; --accent-ink:#05201E;
+  --flag:#DFA451; --flag-soft:#2E2415;
+  --pass:#46BE7A; --fail:#DE6E59; --fail-soft:#33201C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 30px -20px rgba(0,0,0,.9);
+  --d1:#39B3AA; --d2:#7FA3D8; --d3:#B98FC9; --d4:#DFA451;
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font:400 16px/1.6 "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-weight:700;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:1.9rem;letter-spacing:-.01em}
+h2{font-size:1.3rem}
+h3{font-size:1.02rem;font-weight:600}
+p{margin:0}
+a{color:var(--accent)}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+button{font:inherit;color:inherit;cursor:pointer;background:none;border:none}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:3px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* ---------- masthead ---------- */
+.mast{border-bottom:1px solid var(--rule);background:var(--surface)}
+.mast .wrap{display:flex;align-items:center;gap:16px;padding-top:14px;padding-bottom:14px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:1px;margin-right:auto}
+.brand b{font-family:"IBM Plex Sans Condensed",sans-serif;font-size:1.16rem;font-weight:700;letter-spacing:.01em}
+.brand span{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.ghost{border:1px solid var(--rule-strong);border-radius:2px;padding:7px 13px;font-size:.85rem;font-weight:500;background:var(--surface)}
+.ghost:hover{border-color:var(--accent);color:var(--accent)}
+.solid{background:var(--accent);color:var(--accent-ink);border-radius:2px;padding:9px 18px;font-weight:600;font-size:.9rem}
+.solid:hover{filter:brightness(1.08)}
+.solid[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- home ---------- */
+.home{padding:34px 0 70px;display:flex;flex-direction:column;gap:34px}
+.lede{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:end}
+.lede p{color:var(--muted);max-width:62ch;margin-top:9px}
+.streak{display:flex;gap:26px}
+.stat{display:flex;flex-direction:column;gap:2px;text-align:right}
+.stat b{font-family:"IBM Plex Mono",monospace;font-size:1.5rem;font-weight:500;line-height:1}
+.stat span{font-family:"IBM Plex Mono",monospace;font-size:.63rem;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
+
+.papers{display:grid;grid-template-columns:repeat(auto-fill,minmax(232px,1fr));gap:12px}
+.paper{border:1px solid var(--rule);background:var(--surface);border-radius:3px;padding:16px 16px 14px;display:flex;flex-direction:column;gap:11px;text-align:left;transition:border-color .15s,transform .15s}
+.paper:hover{border-color:var(--accent);transform:translateY(-1px)}
+.paper .n{font-family:"IBM Plex Sans Condensed",sans-serif;font-size:1.12rem;font-weight:700}
+.paper .meta{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--faint);letter-spacing:.04em}
+.chips{display:flex;gap:4px;margin-top:auto}
+.chip{flex:1;height:4px;border-radius:2px;background:var(--surface-2)}
+.chip.a{background:var(--d1)}.chip.b{background:var(--d2)}.chip.c{background:var(--d3)}.chip.d{background:var(--d4)}
+.badge{font-family:"IBM Plex Mono",monospace;font-size:.68rem;padding:2px 7px;border-radius:2px;letter-spacing:.03em;align-self:flex-start}
+.badge.pass{background:var(--accent-soft);color:var(--pass)}
+.badge.fail{background:var(--fail-soft);color:var(--fail)}
+.badge.wip{background:var(--flag-soft);color:var(--flag)}
+.badge.new{background:var(--surface-2);color:var(--faint)}
+.paper.wild{border-style:dashed}
+
+.panel{border:1px solid var(--rule);background:var(--surface);border-radius:3px;padding:20px 22px}
+.panel h2{margin-bottom:4px}
+.panel .sub{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+th{text-align:left;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.11em;text-transform:uppercase;color:var(--faint);font-weight:400;padding:0 10px 8px 0;border-bottom:1px solid var(--rule)}
+td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+td.num,th.num{text-align:right;padding-right:0;font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:9px;vertical-align:1px}
+.bar{height:6px;background:var(--surface-2);border-radius:3px;overflow:hidden;min-width:70px}
+.bar i{display:block;height:100%;border-radius:3px}
+.drill{display:flex;flex-wrap:wrap;gap:8px}
+.drill button{border:1px solid var(--rule-strong);border-radius:2px;padding:8px 13px;font-size:.85rem;display:flex;align-items:center;gap:8px}
+.drill button:hover{border-color:var(--accent)}
+.scroller{overflow-x:auto}
+
+/* ---------- runner ---------- */
+.runner{display:grid;grid-template-columns:minmax(0,1fr) 268px;gap:30px;align-items:start;padding:26px 0 80px}
+.qcard{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:26px 30px 30px;box-shadow:var(--shadow)}
+.qhead{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--rule)}
+.qnum{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.1em;color:var(--faint)}
+.tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.06em;padding:2px 7px;border:1px solid var(--rule-strong);border-radius:2px;color:var(--muted)}
+.tag.multi{border-color:var(--flag);color:var(--flag)}
+.flagbtn{margin-left:auto;display:flex;align-items:center;gap:7px;font-size:.8rem;color:var(--muted);border:1px solid var(--rule-strong);border-radius:2px;padding:5px 11px}
+.flagbtn[aria-pressed="true"]{color:var(--flag);border-color:var(--flag);background:var(--flag-soft)}
+.stem{font-size:1.02rem;line-height:1.62;max-width:70ch}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:22px}
+.opt{display:flex;gap:13px;align-items:flex-start;border:1px solid var(--rule);border-radius:3px;padding:12px 15px;text-align:left;line-height:1.55;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--rule-strong);background:var(--surface-2)}
+.opt[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.opt .k{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:.82rem;width:20px;flex:none;padding-top:2px;color:var(--muted)}
+.opt[aria-pressed="true"] .k{color:var(--accent)}
+.opt .t{flex:1;min-width:0}
+.navrow{display:flex;gap:10px;margin-top:26px;align-items:center}
+.navrow .spacer{margin-left:auto}
+
+.rail{position:sticky;top:16px;display:flex;flex-direction:column;gap:14px}
+.clock{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:16px 18px;display:flex;flex-direction:column;gap:9px}
+.clock .t{font-family:"IBM Plex Mono",monospace;font-size:2.1rem;font-weight:500;line-height:1;letter-spacing:-.01em}
+.clock.warn .t{color:var(--flag)}
+.clock.crit .t{color:var(--fail)}
+.clock .row{display:flex;justify-content:space-between;font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--faint);letter-spacing:.05em}
+.grid{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:14px}
+.cells{display:grid;grid-template-columns:repeat(9,1fr);gap:4px}
+.cell{aspect-ratio:1;border:1px solid var(--rule);border-radius:2px;font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--muted);display:flex;align-items:center;justify-content:center;padding:0}
+.cell.done{background:var(--accent-soft);border-color:var(--accent-soft);color:var(--accent)}
+.cell.flag{border-color:var(--flag);color:var(--flag)}
+.cell.now{outline:2px solid var(--ink);outline-offset:1px}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px;font-family:"IBM Plex Mono",monospace;font-size:.64rem;color:var(--faint)}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:5px;vertical-align:-1px;border:1px solid var(--rule)}
+
+/* ---------- results ---------- */
+.results{padding:28px 0 80px;display:flex;flex-direction:column;gap:20px}
+.verdict{background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:26px 30px;box-shadow:var(--shadow)}
+.vtop{display:flex;align-items:flex-end;gap:34px;flex-wrap:wrap}
+.score{display:flex;flex-direction:column;gap:4px}
+.score b{font-family:"IBM Plex Mono",monospace;font-size:3.6rem;font-weight:500;line-height:.95;letter-spacing:-.02em}
+.score.ok b{color:var(--pass)} .score.no b{color:var(--fail)}
+.vfacts{display:flex;gap:30px;flex-wrap:wrap;margin-left:auto}
+.scale{margin-top:24px}
+.scaletrack{position:relative;height:10px;background:var(--surface-2);border-radius:5px}
+.scaletrack i{position:absolute;inset:0 auto 0 0;border-radius:5px;background:var(--accent)}
+.scaletrack .ok{background:var(--pass)} .scaletrack .no{background:var(--fail)}
+.passline{position:absolute;top:-6px;bottom:-6px;width:2px;background:var(--ink);left:68.9%}
+.scalelabels{display:flex;justify-content:space-between;margin-top:7px;font-family:"IBM Plex Mono",monospace;font-size:.66rem;color:var(--faint)}
+.passtag{position:absolute;left:68.9%;transform:translateX(-50%);top:-24px;font-family:"IBM Plex Mono",monospace;font-size:.62rem;color:var(--ink);white-space:nowrap;letter-spacing:.06em}
+
+.review{display:flex;flex-direction:column;gap:10px}
+.item{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--pass);border-radius:3px;padding:16px 20px}
+.item.bad{border-left-color:var(--fail)}
+.item.skip{border-left-color:var(--rule-strong)}
+.ihead{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:9px}
+.mark{font-family:"IBM Plex Mono",monospace;font-size:.7rem;font-weight:600;letter-spacing:.05em}
+.item .mark{color:var(--pass)} .item.bad .mark{color:var(--fail)} .item.skip .mark{color:var(--muted)}
+.istem{font-size:.95rem;line-height:1.6;max-width:74ch;color:var(--ink)}
+.iopts{display:flex;flex-direction:column;gap:5px;margin-top:12px}
+.iopt{display:flex;gap:11px;font-size:.88rem;line-height:1.5;padding:7px 11px;border-radius:3px;border:1px solid transparent;color:var(--muted)}
+.iopt .k{font-family:"IBM Plex Mono",monospace;font-weight:600;width:18px;flex:none}
+.iopt .t{flex:1;min-width:0}
+.iopt.right{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.iopt.wrong{background:var(--fail-soft);color:var(--ink);border-color:var(--fail)}
+.ifoot{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:13px;font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--faint)}
+.ifoot a{color:var(--faint);text-decoration:underline}
+.ifoot a:hover{color:var(--accent)}
+.explain{margin-top:13px;padding:14px 16px;background:var(--surface-2);border-radius:3px;font-size:.9rem;line-height:1.62;white-space:pre-wrap}
+.filters{display:flex;gap:7px;flex-wrap:wrap}
+.filters button{border:1px solid var(--rule-strong);border-radius:2px;padding:6px 12px;font-size:.82rem}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--ground);border-color:var(--ink)}
+
+.note{font-size:.82rem;color:var(--faint);line-height:1.6;max-width:76ch}
+.hist{display:flex;flex-direction:column;gap:0}
+.hrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:14px;align-items:center;padding:9px 0;border-bottom:1px solid var(--rule);font-size:.87rem}
+.hrow:last-child{border-bottom:none}
+
+@media (max-width:880px){
+  .runner{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;order:-1;flex-direction:row;flex-wrap:wrap;gap:10px}
+  .clock{flex:1;min-width:150px} .grid{flex:1 1 100%}
+  .cells{grid-template-columns:repeat(13,1fr)}
+  .lede{grid-template-columns:1fr} .streak{justify-content:flex-start}
+  .stat{text-align:left}
+  .qcard{padding:20px 18px 24px}
+}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="brand"><b>SAA-C03 Exam Room</b><span id="crumb">Six full-length papers</span></div>
+    <button class="ghost" id="themeBtn" title="Switch theme">Theme</button>
+    <button class="ghost" id="homeBtn" hidden>Leave exam</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<script id="bank" type="application/json">__DATA__</script>
+<script>
+(function(){
+"use strict";
+
+var BANK = JSON.parse(document.getElementById("bank").textContent);
+var QS = {}; BANK.q.forEach(function(q){ QS[q.i] = q; });
+
+var DOM = {
+  SEC:{n:1, name:"Design Secure Architectures",           weight:30, css:"--d1"},
+  REL:{n:2, name:"Design Resilient Architectures",        weight:26, css:"--d2"},
+  PERF:{n:3,name:"Design High-Performing Architectures",  weight:24, css:"--d3"},
+  COST:{n:4,name:"Design Cost-Optimized Architectures",   weight:20, css:"--d4"}
+};
+var ORDER = ["SEC","REL","PERF","COST"];
+var QUOTA = { SEC:{easy:11,medium:6,hard:2}, REL:{easy:10,medium:5,hard:2},
+              PERF:{easy:9,medium:5,hard:2}, COST:{easy:7,medium:4,hard:2} };
+var LIMIT_SEC = 130*60;
+var LS_RUN = "saa.attempt.v1", LS_HIST = "saa.history.v1";
+
+/* ---------- capability wiring: everything works without it ---------- */
+var db = null, sampler = null;
+function useCap(name){
+  try{
+    if (window.claude && typeof claude.use === "function")
+      return claude.use(name).catch(function(){ return null; });
+  }catch(e){}
+  return Promise.resolve(null);
+}
+useCap("db").then(function(x){ db = x; if (x) pullHistory(); });
+useCap("sample").then(function(x){ sampler = x; document.body.classList.toggle("has-sampler", !!x); });
+
+/* ---------- small helpers ---------- */
+function el(tag, cls, text){ var n=document.createElement(tag); if(cls)n.className=cls; if(text!=null)n.textContent=text; return n; }
+function clock(s){ var m=Math.floor(s/60), r=s%60; return m+":"+(r<10?"0":"")+r; }
+function longClock(s){ var h=Math.floor(s/3600), m=Math.floor(s%3600/60), r=s%60;
+  return (h?h+":"+(m<10?"0":""):"")+m+":"+(r<10?"0":"")+r; }
+function shuffle(a, rnd){ for(var i=a.length-1;i>0;i--){ var j=Math.floor((rnd?rnd():Math.random())*(i+1)); var t=a[i];a[i]=a[j];a[j]=t; } return a; }
+function readLS(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } }
+function writeLS(k,v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+function dropLS(k){ try{ localStorage.removeItem(k); }catch(e){} }
+
+/* AWS does not publish the raw-to-scaled mapping. This anchors 720 at 72%
+   correct, the figure candidates consistently report, with 100 and 1000
+   at the ends of the official scale. */
+function scaledScore(frac){
+  return Math.round(frac >= 0.72 ? 720 + (frac-0.72)/0.28*280 : 100 + frac/0.72*620);
+}
+
+/* ---------- building a paper from the bank ---------- */
+function buildPaper(){
+  var pools = {};
+  BANK.q.forEach(function(q){
+    var k = q.d+"|"+q.x+"|"+(q.n>1?q.n:1);
+    (pools[k] = pools[k] || []).push(q);
+  });
+  Object.keys(pools).forEach(function(k){ shuffle(pools[k]); });
+
+  var need = {}, picked = [], fams = {}, taken = {};
+  ORDER.forEach(function(d){ need[d] = { easy:QUOTA[d].easy, medium:QUOTA[d].medium, hard:QUOTA[d].hard }; });
+
+  function grab(dom, diffs, nsel){
+    for (var i=0;i<diffs.length;i++){
+      var list = pools[dom+"|"+diffs[i]+"|"+nsel];
+      if (!list || !list.length) continue;
+      var best = 0, bestScore = Infinity;
+      for (var j=0;j<list.length;j++){
+        if (taken[list[j].i]) continue;
+        var f = fams[list[j].f] || 0;
+        if (f < bestScore){ bestScore = f; best = j; if (f === 0) break; }
+      }
+      var q = list[best];
+      if (!q || taken[q.i]) continue;
+      taken[q.i] = 1; list.splice(best,1);
+      fams[q.f] = (fams[q.f]||0)+1;
+      need[dom][q.x] = Math.max(0, need[dom][q.x]-1);
+      return q;
+    }
+    return null;
+  }
+  function nearest(d){ var o=["easy","medium","hard"], i=o.indexOf(d);
+    return o.slice().sort(function(a,b){ return Math.abs(o.indexOf(a)-i)-Math.abs(o.indexOf(b)-i); }); }
+
+  [[3,1],[2,7]].forEach(function(pair){
+    for (var k=0;k<pair[1];k++){
+      var doms = ORDER.slice(k % ORDER.length).concat(ORDER.slice(0, k % ORDER.length));
+      for (var d=0;d<doms.length;d++){
+        var want = "easy", top = -1;
+        Object.keys(need[doms[d]]).forEach(function(x){ if (need[doms[d]][x] > top){ top = need[doms[d]][x]; want = x; } });
+        var q = grab(doms[d], nearest(want), pair[0]);
+        if (q){ picked.push(q); break; }
+      }
+    }
+  });
+  ORDER.forEach(function(d){
+    ["easy","medium","hard"].forEach(function(x){
+      var want = need[d][x];
+      for (var i=0;i<want;i++){
+        var q = grab(d, [x].concat(nearest(x)), 1);
+        if (q) picked.push(q);
+      }
+    });
+  });
+  return arrange(picked);
+}
+
+/* Keep domains and service families rotating, and stop two multi-response
+   questions from sitting next to each other. */
+function arrange(list){
+  if (!list.length) return [];
+  var best = null, bestCost = Infinity;
+  for (var attempt=0; attempt<120; attempt++){
+    var rest = shuffle(list.slice()), out = [], cost = 0;
+    while (rest.length){
+      var pick = -1;
+      for (var i=0;i<rest.length;i++){
+        var tail = out.slice(-2);
+        var dr = tail.filter(function(p){ return p.d === rest[i].d; }).length;
+        var fr = tail.filter(function(p){ return p.f === rest[i].f; }).length;
+        if (dr < 2 && fr < 2){ pick = i; break; }
+      }
+      if (pick < 0){ pick = 0; cost += 1; }
+      out.push(rest.splice(pick,1)[0]);
+    }
+    var pos = [];
+    out.forEach(function(q,i){ if (q.n>1) pos.push(i); });
+    var adj = 0;
+    for (var p=1;p<pos.length;p++) if (pos[p]-pos[p-1] === 1) adj++;
+    var c = cost*100 + adj*10 + (pos.indexOf(0) === 0 ? 3 : 0);
+    if (c < bestCost){ best = out; bestCost = c; if (c === 0) break; }
+  }
+  return best.map(function(q){ return q.i; });
+}
+
+/* ---------- attempt state ---------- */
+var run = null, ticker = null;
+
+function startAttempt(spec){
+  run = { label:spec.label, kind:spec.kind, ids:spec.ids, answers:{}, flags:{},
+          idx:0, limit:spec.limit, spent:0, startedAt:Date.now() };
+  saveRun(); render();
+}
+function saveRun(){ if (run) writeLS(LS_RUN, run); }
+function resumeRun(){
+  var r = readLS(LS_RUN);
+  if (r && r.ids && r.ids.length && r.ids.every(function(i){ return QS[i]; })) return r;
+  return null;
+}
+
+function tick(){
+  if (!run || run.limit == null) return;
+  run.spent += 1;
+  if (run.spent >= run.limit){ finish(true); return; }
+  paintClock();
+  if (run.spent % 10 === 0) saveRun();
+}
+function startTicker(){ stopTicker(); if (run && run.limit != null) ticker = setInterval(tick, 1000); }
+function stopTicker(){ if (ticker){ clearInterval(ticker); ticker = null; } }
+
+/* ---------- grading ---------- */
+function grade(state){
+  var perDomain = {}; ORDER.forEach(function(d){ perDomain[d] = { got:0, of:0 }; });
+  var correct = 0, detail = [];
+  state.ids.forEach(function(id){
+    var q = QS[id], mine = (state.answers[id] || []).slice().sort();
+    var key = q.a.split("").sort();
+    var ok = mine.length === key.length && mine.every(function(v,i){ return v === key[i]; });
+    perDomain[q.d].of += 1;
+    if (ok){ correct += 1; perDomain[q.d].got += 1; }
+    detail.push({ id:id, ok:ok, mine:mine, skipped:mine.length === 0 });
+  });
+  var frac = state.ids.length ? correct/state.ids.length : 0;
+  return { label:state.label, kind:state.kind, correct:correct, total:state.ids.length,
+           frac:frac, scaled:scaledScore(frac), passed:scaledScore(frac) >= 720,
+           perDomain:perDomain, detail:detail, seconds:state.spent, flagged:state.flags,
+           finishedAt:Date.now(), ids:state.ids, answers:state.answers };
+}
+
+var lastResult = null, history = [];
+
+function finish(auto){
+  stopTicker();
+  lastResult = grade(run);
+  history.unshift(lastResult);
+  writeLS(LS_HIST, history.slice(0,60).map(strip));
+  pushHistory(lastResult);
+  dropLS(LS_RUN);
+  run = null;
+  render(auto ? "time" : null);
+}
+function strip(r){
+  return { label:r.label, kind:r.kind, correct:r.correct, total:r.total, scaled:r.scaled,
+           passed:r.passed, seconds:r.seconds, finishedAt:r.finishedAt, frac:r.frac,
+           perDomain:r.perDomain, ids:r.ids, answers:r.answers, flagged:r.flagged };
+}
+function pushHistory(r){
+  if (!db) return;
+  try{
+    db.collection("attempts").doc(String(r.finishedAt)).set(strip(r)).catch(function(){});
+  }catch(e){}
+}
+function pullHistory(){
+  try{
+    db.collection("attempts").orderBy("finishedAt","desc").limit(60).get().then(function(snap){
+      var rows = snap.docs.map(function(d){ return d.data(); }).filter(Boolean);
+      var seen = {}; var merged = rows.concat(history);
+      history = merged.filter(function(r){
+        if (!r || seen[r.finishedAt]) return false; seen[r.finishedAt] = 1; return true;
+      }).sort(function(a,b){ return b.finishedAt - a.finishedAt; });
+      writeLS(LS_HIST, history.slice(0,60));
+      if (!run && !lastResult) render();
+    }).catch(function(){});
+  }catch(e){}
+}
+history = readLS(LS_HIST) || [];
+
+/* ---------- views ---------- */
+var app = document.getElementById("app");
+var crumb = document.getElementById("crumb");
+var homeBtn = document.getElementById("homeBtn");
+
+function render(flash){
+  app.textContent = "";
+  homeBtn.hidden = !run;
+  if (run){ crumb.textContent = run.label; viewRun(); startTicker(); }
+  else if (lastResult){ crumb.textContent = lastResult.label + " · results"; viewResult(flash); }
+  else { crumb.textContent = "Six full-length papers"; viewHome(); }
+  window.scrollTo(0,0);
+}
+
+/* ----- home ----- */
+function viewHome(){
+  var w = el("div","wrap"), home = el("div","home"); w.appendChild(home);
+
+  var lede = el("div","lede");
+  var left = el("div");
+  left.appendChild(el("div","eyebrow","AWS Certified Solutions Architect – Associate"));
+  var h = el("h1","","Six papers built to the published blueprint");
+  h.style.marginTop = "8px"; left.appendChild(h);
+  left.appendChild(el("p","","65 questions in 130 minutes, weighted 30/26/24/20 across the four exam domains, "
+    + "with the same question-type and difficulty mix on every paper. Drawn from a bank of "
+    + BANK.q.length + " community questions."));
+  lede.appendChild(left);
+
+  var done = history.filter(function(r){ return r.kind !== "drill"; });
+  var best = done.length ? Math.max.apply(null, done.map(function(r){ return r.scaled; })) : null;
+  var streak = el("div","streak");
+  streak.appendChild(stat(String(done.length), "papers sat"));
+  streak.appendChild(stat(best == null ? "—" : String(best), "best score"));
+  streak.appendChild(stat(weakest() || "—", "weakest domain"));
+  lede.appendChild(streak);
+  home.appendChild(lede);
+
+  var saved = resumeRun();
+  if (saved){
+    var res = el("div","panel");
+    res.style.borderColor = "var(--flag)";
+    res.appendChild(el("div","eyebrow","Unfinished"));
+    var rh = el("h2","", saved.label); rh.style.margin = "6px 0 4px"; res.appendChild(rh);
+    var answered = Object.keys(saved.answers).length;
+    res.appendChild(el("p","sub", answered + " of " + saved.ids.length + " answered"
+      + (saved.limit != null ? " · " + longClock(Math.max(0, saved.limit - saved.spent)) + " left" : "")));
+    var rb = el("button","solid","Resume");
+    rb.onclick = function(){ run = saved; render(); };
+    var db2 = el("button","ghost","Discard");
+    db2.style.marginLeft = "8px";
+    db2.onclick = function(){ dropLS(LS_RUN); render(); };
+    res.appendChild(rb); res.appendChild(db2);
+    home.appendChild(res);
+  }
+
+  var papers = el("div","papers");
+  BANK.e.forEach(function(ids, i){
+    papers.appendChild(paperCard("Paper " + (i+1), ids, i));
+  });
+  var wild = el("button","paper wild");
+  wild.appendChild(el("div","n","Fresh paper"));
+  wild.appendChild(el("div","meta","65 questions · drawn now"));
+  wild.appendChild(el("div","badge new","BLUEPRINT-MATCHED"));
+  var wc = el("div","chips");
+  ["a","b","c","d"].forEach(function(c){ wc.appendChild(el("i","chip "+c)); });
+  wild.appendChild(wc);
+  wild.onclick = function(){
+    startAttempt({ label:"Fresh paper", kind:"paper", ids:buildPaper(), limit:LIMIT_SEC });
+  };
+  papers.appendChild(wild);
+  home.appendChild(papers);
+
+  /* domain drill */
+  var drillPanel = el("div","panel");
+  drillPanel.appendChild(el("h2","","Drill one domain"));
+  drillPanel.appendChild(el("p","sub","20 questions from a single domain, untimed, weighted toward the ones the community found hard."));
+  var drill = el("div","drill");
+  ORDER.forEach(function(d){
+    var b = el("button");
+    var dot = el("i","dot"); dot.style.background = "var(" + DOM[d].css + ")";
+    b.appendChild(dot);
+    b.appendChild(el("span","", DOM[d].n + ". " + DOM[d].name.replace("Design ","")));
+    b.onclick = function(){ startDrill(d); };
+    drill.appendChild(b);
+  });
+  drillPanel.appendChild(drill);
+  home.appendChild(drillPanel);
+
+  /* blueprint */
+  var bp = el("div","panel");
+  bp.appendChild(el("h2","","What each paper holds"));
+  bp.appendChild(el("p","sub","Domain counts come straight from the AWS exam guide weights."));
+  var sc = el("div","scroller"), t = el("table");
+  t.innerHTML = "<thead><tr><th>Domain</th><th class='num'>Weight</th><th class='num'>Questions</th>"
+    + "<th class='num'>Bank</th></tr></thead>";
+  var tb = el("tbody");
+  ORDER.forEach(function(d){
+    var inBank = BANK.q.filter(function(q){ return q.d === d; }).length;
+    var count = QUOTA[d].easy + QUOTA[d].medium + QUOTA[d].hard;
+    var tr = el("tr");
+    var td1 = el("td");
+    var dot = el("i","dot"); dot.style.background = "var(" + DOM[d].css + ")";
+    td1.appendChild(dot); td1.appendChild(document.createTextNode(DOM[d].n + ". " + DOM[d].name));
+    tr.appendChild(td1);
+    tr.appendChild(el("td","num", DOM[d].weight + "%"));
+    tr.appendChild(el("td","num", String(count)));
+    tr.appendChild(el("td","num", String(inBank)));
+    tb.appendChild(tr);
+  });
+  t.appendChild(tb); sc.appendChild(t); bp.appendChild(sc);
+  bp.appendChild(el("p","note","Every paper carries 57 single-answer questions, 7 that ask for two "
+    + "answers and 1 that asks for three — about the share of multiple-response items the real exam runs. "
+    + "Difficulty is split 37 straightforward, 20 moderate and 8 contested, where contested means the "
+    + "community itself did not agree on the answer."));
+  bp.querySelector(".note").style.marginTop = "16px";
+  home.appendChild(bp);
+
+  if (history.length){
+    var hp = el("div","panel");
+    hp.appendChild(el("h2","","Your attempts"));
+    hp.appendChild(el("p","sub", db ? "Saved to this page, so they follow you across devices."
+                                    : "Saved in this browser."));
+    var hist = el("div","hist");
+    history.slice(0,12).forEach(function(r){
+      var row = el("div","hrow");
+      row.appendChild(el("span","mono", new Date(r.finishedAt).toLocaleDateString(undefined,{month:"short",day:"numeric"})));
+      row.appendChild(el("span","", r.label));
+      row.appendChild(el("span","mono", r.correct + "/" + r.total));
+      var s = el("span","badge " + (r.kind === "drill" ? "new" : (r.passed ? "pass" : "fail")),
+                 r.kind === "drill" ? Math.round(r.frac != null ? r.frac*100 : r.correct/r.total*100) + "%" : String(r.scaled));
+      row.appendChild(s);
+      hist.appendChild(row);
+    });
+    hp.appendChild(hist);
+    home.appendChild(hp);
+  }
+
+  var caveat = el("div","panel");
+  caveat.appendChild(el("h2","","Before you trust the key"));
+  caveat.appendChild(el("p","note","The bank is a community question dump, not official AWS material. "
+    + "Each answer is the one the community voted for, and the percentage next to it is how strongly they agreed. "
+    + "Anything under 70 per cent is genuinely disputed — read the linked discussion rather than memorising it. "
+    + "Domain labels are inferred from each question's wording, so the counts reproduce the blueprint's shape "
+    + "rather than an AWS-certified mapping."));
+  home.appendChild(caveat);
+
+  app.appendChild(w);
+}
+function stat(v, label){ var s=el("div","stat"); s.appendChild(el("b","",v)); s.appendChild(el("span","",label)); return s; }
+function weakest(){
+  var agg = {}; ORDER.forEach(function(d){ agg[d] = { got:0, of:0 }; });
+  history.forEach(function(r){
+    if (!r.perDomain) return;
+    ORDER.forEach(function(d){
+      if (r.perDomain[d]){ agg[d].got += r.perDomain[d].got; agg[d].of += r.perDomain[d].of; }
+    });
+  });
+  var worst = null, rate = 2;
+  ORDER.forEach(function(d){
+    if (agg[d].of >= 5){ var v = agg[d].got/agg[d].of; if (v < rate){ rate = v; worst = d; } }
+  });
+  return worst ? "D" + DOM[worst].n : null;
+}
+function paperCard(label, ids, i){
+  var prior = history.filter(function(r){ return r.label === label; });
+  var b = el("button","paper");
+  b.appendChild(el("div","n", label));
+  var counts = {}; ORDER.forEach(function(d){ counts[d] = 0; });
+  ids.forEach(function(id){ if (QS[id]) counts[QS[id].d] += 1; });
+  b.appendChild(el("div","meta", ids.length + " questions · 130 min"));
+  if (prior.length){
+    var top = prior.reduce(function(a,r){ return r.scaled > a.scaled ? r : a; });
+    b.appendChild(el("div","badge " + (top.passed ? "pass" : "fail"),
+      (top.passed ? "PASSED " : "SCORED ") + top.scaled));
+  } else {
+    b.appendChild(el("div","badge new","NOT SAT"));
+  }
+  var chips = el("div","chips");
+  ORDER.forEach(function(d, k){
+    var c = el("i","chip " + ["a","b","c","d"][k]);
+    c.style.flexGrow = String(counts[d]);
+    c.title = DOM[d].name + ": " + counts[d];
+    chips.appendChild(c);
+  });
+  b.appendChild(chips);
+  b.onclick = function(){
+    startAttempt({ label:label, kind:"paper", ids:ids.slice(), limit:LIMIT_SEC });
+  };
+  return b;
+}
+function startDrill(d){
+  var pool = BANK.q.filter(function(q){ return q.d === d; });
+  var hard = shuffle(pool.filter(function(q){ return q.x !== "easy"; })).slice(0,11);
+  var rest = shuffle(pool.filter(function(q){ return q.x === "easy"; })).slice(0,9);
+  var ids = arrange(hard.concat(rest));
+  startAttempt({ label:"Domain " + DOM[d].n + " drill", kind:"drill", ids:ids, limit:null });
+}
+
+/* ----- runner ----- */
+function viewRun(){
+  var w = el("div","wrap"), grid = el("div","runner"); w.appendChild(grid);
+  var main = el("div"); grid.appendChild(main);
+  var rail = el("aside","rail"); grid.appendChild(rail);
+
+  var q = QS[run.ids[run.idx]];
+  var card = el("div","qcard");
+  var head = el("div","qhead");
+  head.appendChild(el("span","qnum","Question " + (run.idx+1) + " of " + run.ids.length));
+  head.appendChild(el("span","tag", "Domain " + DOM[q.d].n));
+  if (q.n > 1) head.appendChild(el("span","tag multi", "Choose " + (q.n === 2 ? "two" : "three")));
+  var fb = el("button","flagbtn","Flag for review");
+  fb.setAttribute("aria-pressed", run.flags[q.i] ? "true" : "false");
+  fb.onclick = function(){
+    if (run.flags[q.i]) delete run.flags[q.i]; else run.flags[q.i] = 1;
+    saveRun(); render();
+  };
+  head.appendChild(fb);
+  card.appendChild(head);
+  card.appendChild(el("p","stem", q.s));
+
+  var opts = el("div","opts");
+  var chosen = run.answers[q.i] || [];
+  Object.keys(q.o).sort().forEach(function(letter){
+    var b = el("button","opt");
+    b.setAttribute("aria-pressed", chosen.indexOf(letter) >= 0 ? "true" : "false");
+    b.appendChild(el("span","k", letter));
+    b.appendChild(el("span","t", q.o[letter]));
+    b.onclick = function(){ choose(q, letter); };
+    opts.appendChild(b);
+  });
+  card.appendChild(opts);
+
+  var nav = el("div","navrow");
+  var prev = el("button","ghost","Previous");
+  prev.disabled = run.idx === 0;
+  prev.onclick = function(){ go(run.idx-1); };
+  nav.appendChild(prev);
+  var next = el("button","solid", run.idx === run.ids.length-1 ? "Review and submit" : "Next");
+  next.onclick = function(){
+    if (run.idx === run.ids.length-1) confirmSubmit(); else go(run.idx+1);
+  };
+  var sp = el("span","spacer"); nav.appendChild(sp); nav.appendChild(next);
+  card.appendChild(nav);
+  main.appendChild(card);
+
+  /* rail */
+  var answered = Object.keys(run.answers).length;
+  if (run.limit != null){
+    var left = Math.max(0, run.limit - run.spent);
+    var c = el("div","clock" + (left < 300 ? " crit" : left < 900 ? " warn" : ""));
+    c.id = "clockBox";
+    c.appendChild(el("div","eyebrow","Time remaining"));
+    c.appendChild(el("div","t mono", longClock(left)));
+    var row = el("div","row");
+    row.appendChild(el("span","", answered + "/" + run.ids.length + " answered"));
+    row.appendChild(el("span","", Math.round(run.spent/Math.max(1,answered)) + "s/q"));
+    c.appendChild(row);
+    rail.appendChild(c);
+  } else {
+    var c2 = el("div","clock");
+    c2.appendChild(el("div","eyebrow","Untimed drill"));
+    c2.appendChild(el("div","t mono", answered + "/" + run.ids.length));
+    var r2 = el("div","row"); r2.appendChild(el("span","","answered")); c2.appendChild(r2);
+    rail.appendChild(c2);
+  }
+
+  var gbox = el("div","grid");
+  var cells = el("div","cells");
+  run.ids.forEach(function(id, i){
+    var cls = "cell";
+    if ((run.answers[id] || []).length) cls += " done";
+    if (run.flags[id]) cls += " flag";
+    if (i === run.idx) cls += " now";
+    var b = el("button", cls, String(i+1));
+    b.onclick = function(){ go(i); };
+    cells.appendChild(b);
+  });
+  gbox.appendChild(cells);
+  var lg = el("div","legend");
+  [["answered","var(--accent-soft)","var(--accent-soft)"],["flagged","transparent","var(--flag)"],["untouched","var(--surface)","var(--rule)"]]
+    .forEach(function(x){
+      var s = el("span");
+      var i = el("i"); i.style.background = x[1]; i.style.borderColor = x[2];
+      s.appendChild(i); s.appendChild(document.createTextNode(x[0]));
+      lg.appendChild(s);
+    });
+  gbox.appendChild(lg);
+  var sub = el("button","solid","Submit paper");
+  sub.style.marginTop = "14px"; sub.style.width = "100%";
+  sub.onclick = confirmSubmit;
+  gbox.appendChild(sub);
+  rail.appendChild(gbox);
+
+  var tip = el("p","note","Keys: A–E to answer, ← → to move, F to flag.");
+  tip.style.padding = "0 2px";
+  rail.appendChild(tip);
+
+  app.appendChild(w);
+}
+function paintClock(){
+  var box = document.getElementById("clockBox");
+  if (!box || !run || run.limit == null) return;
+  var left = Math.max(0, run.limit - run.spent);
+  box.className = "clock" + (left < 300 ? " crit" : left < 900 ? " warn" : "");
+  box.querySelector(".t").textContent = longClock(left);
+}
+function choose(q, letter){
+  var cur = (run.answers[q.i] || []).slice();
+  var at = cur.indexOf(letter);
+  if (q.n === 1){ cur = at >= 0 ? [] : [letter]; }
+  else if (at >= 0){ cur.splice(at,1); }
+  else if (cur.length < q.n){ cur.push(letter); }
+  else { cur.shift(); cur.push(letter); }
+  if (cur.length) run.answers[q.i] = cur; else delete run.answers[q.i];
+  saveRun();
+  var auto = q.n === 1 && cur.length === 1 && run.idx < run.ids.length-1;
+  if (auto) setTimeout(function(){ go(run.idx+1); }, 130); else render();
+}
+function go(i){
+  if (!run || i < 0 || i >= run.ids.length) return;
+  run.idx = i; saveRun(); render();
+}
+function confirmSubmit(){
+  var missing = run.ids.filter(function(id){ return !(run.answers[id] || []).length; }).length;
+  var msg = missing
+    ? missing + " question" + (missing>1?"s are":" is") + " still unanswered. Submit anyway?"
+    : "Submit this paper for marking?";
+  if (window.confirm(msg)) finish(false);
+}
+
+/* ----- results ----- */
+var reviewFilter = "wrong";
+function viewResult(flash){
+  var r = lastResult;
+  var w = el("div","wrap"), out = el("div","results"); w.appendChild(out);
+
+  var v = el("div","verdict");
+  if (flash === "time"){
+    var t = el("div","eyebrow","Time expired — marked as it stood");
+    t.style.color = "var(--flag)"; v.appendChild(t);
+  }
+  var top = el("div","vtop");
+  var isDrill = r.kind === "drill";
+  var sc = el("div","score " + (isDrill ? "" : (r.passed ? "ok" : "no")));
+  sc.appendChild(el("b","mono", isDrill ? Math.round(r.frac*100) + "%" : String(r.scaled)));
+  sc.appendChild(el("div","eyebrow", isDrill ? "correct" : (r.passed ? "pass · 720 needed" : "below 720")));
+  top.appendChild(sc);
+  var facts = el("div","vfacts");
+  facts.appendChild(stat(r.correct + "/" + r.total, "correct"));
+  facts.appendChild(stat(longClock(r.seconds), "time used"));
+  facts.appendChild(stat(Math.round(r.seconds/Math.max(1,r.total)) + "s", "per question"));
+  top.appendChild(facts);
+  v.appendChild(top);
+
+  if (!isDrill){
+    var scale = el("div","scale");
+    var track = el("div","scaletrack");
+    var fill = el("i", r.passed ? "ok" : "no");
+    fill.style.width = Math.max(2, Math.min(100, (r.scaled-100)/9)) + "%";
+    track.appendChild(fill);
+    track.appendChild(el("div","passline"));
+    track.appendChild(el("div","passtag","720 to pass"));
+    scale.appendChild(track);
+    var labels = el("div","scalelabels");
+    labels.appendChild(el("span","","100")); labels.appendChild(el("span","","1000"));
+    scale.appendChild(labels);
+    v.appendChild(scale);
+    v.appendChild(el("p","note","AWS does not publish how raw answers map to the 100–1000 scale. "
+      + "This estimate anchors 720 at 72 per cent correct, the figure candidates consistently report."));
+    v.querySelectorAll(".note")[0].style.marginTop = "18px";
+  }
+  out.appendChild(v);
+
+  /* domain breakdown */
+  var dp = el("div","panel");
+  dp.appendChild(el("h2","","Where the marks went"));
+  dp.appendChild(el("p","sub","Compare each domain against the share of the exam it carries."));
+  var sc2 = el("div","scroller"), tb = el("table");
+  tb.innerHTML = "<thead><tr><th>Domain</th><th class='num'>Score</th><th style='width:38%'></th>"
+    + "<th class='num'>Rate</th></tr></thead>";
+  var body = el("tbody");
+  ORDER.forEach(function(d){
+    var pd = r.perDomain[d];
+    if (!pd || !pd.of) return;
+    var rate = pd.got/pd.of;
+    var tr = el("tr");
+    var td = el("td");
+    var dot = el("i","dot"); dot.style.background = "var(" + DOM[d].css + ")";
+    td.appendChild(dot); td.appendChild(document.createTextNode(DOM[d].n + ". " + DOM[d].name));
+    tr.appendChild(td);
+    tr.appendChild(el("td","num", pd.got + "/" + pd.of));
+    var tdb = el("td"), bar = el("div","bar"), fill2 = el("i");
+    fill2.style.width = Math.round(rate*100) + "%";
+    fill2.style.background = rate >= 0.72 ? "var(--pass)" : rate >= 0.6 ? "var(--flag)" : "var(--fail)";
+    bar.appendChild(fill2); tdb.appendChild(bar); tr.appendChild(tdb);
+    tr.appendChild(el("td","num", Math.round(rate*100) + "%"));
+    body.appendChild(tr);
+  });
+  tb.appendChild(body); sc2.appendChild(tb); dp.appendChild(sc2);
+  out.appendChild(dp);
+
+  /* review */
+  var rp = el("div","panel");
+  var rh = el("div"); rh.style.display = "flex"; rh.style.alignItems = "center";
+  rh.style.gap = "14px"; rh.style.flexWrap = "wrap"; rh.style.marginBottom = "14px";
+  var rt = el("div");
+  rt.appendChild(el("h2","","Review"));
+  rt.appendChild(el("p","sub","Percentages are how strongly the community agreed on that answer."));
+  rt.querySelector(".sub").style.marginBottom = "0";
+  rh.appendChild(rt);
+  var filt = el("div","filters");
+  filt.style.marginLeft = "auto";
+  var wrongN = r.detail.filter(function(d){ return !d.ok; }).length;
+  [["wrong","Missed (" + wrongN + ")"],["flagged","Flagged"],["all","All " + r.total]].forEach(function(f){
+    var b = el("button","", f[1]);
+    b.setAttribute("aria-pressed", reviewFilter === f[0] ? "true" : "false");
+    b.onclick = function(){ reviewFilter = f[0]; render(); };
+    filt.appendChild(b);
+  });
+  rh.appendChild(filt);
+  rp.appendChild(rh);
+
+  var list = el("div","review");
+  var shown = 0;
+  r.detail.forEach(function(d, i){
+    if (reviewFilter === "wrong" && d.ok) return;
+    if (reviewFilter === "flagged" && !(r.flagged && r.flagged[d.id])) return;
+    shown++;
+    list.appendChild(reviewItem(QS[d.id], d, i+1));
+  });
+  if (!shown){
+    var none = el("p","note", reviewFilter === "wrong"
+      ? "Nothing missed on this paper." : "Nothing flagged on this paper.");
+    list.appendChild(none);
+  }
+  rp.appendChild(list);
+  out.appendChild(rp);
+
+  var again = el("div","panel");
+  again.style.display = "flex"; again.style.gap = "10px"; again.style.flexWrap = "wrap";
+  again.style.alignItems = "center";
+  var b1 = el("button","solid","Back to the papers");
+  b1.onclick = function(){ lastResult = null; render(); };
+  again.appendChild(b1);
+  var b2 = el("button","ghost","Sit this paper again");
+  b2.onclick = function(){
+    var ids = r.ids.slice(), label = r.label, kind = r.kind;
+    lastResult = null;
+    startAttempt({ label:label, kind:kind, ids:ids, limit:kind === "drill" ? null : LIMIT_SEC });
+  };
+  again.appendChild(b2);
+  out.appendChild(again);
+
+  app.appendChild(w);
+}
+
+function reviewItem(q, d, n){
+  var wrap = el("div","item" + (d.ok ? "" : (d.skipped ? " skip" : " bad")));
+  var head = el("div","ihead");
+  head.appendChild(el("span","mark", d.ok ? "CORRECT" : d.skipped ? "SKIPPED" : "MISSED"));
+  head.appendChild(el("span","qnum","#" + n));
+  head.appendChild(el("span","tag","Domain " + DOM[q.d].n));
+  head.appendChild(el("span","tag", q.f));
+  if (q.x === "hard") head.appendChild(el("span","tag multi","disputed"));
+  wrap.appendChild(head);
+  wrap.appendChild(el("p","istem", q.s));
+
+  var opts = el("div","iopts");
+  var key = q.a.split("");
+  Object.keys(q.o).sort().forEach(function(letter){
+    var isKey = key.indexOf(letter) >= 0, isMine = d.mine.indexOf(letter) >= 0;
+    var o = el("div","iopt" + (isKey ? " right" : (isMine ? " wrong" : "")));
+    o.appendChild(el("span","k", letter));
+    var t = el("span","t", q.o[letter]);
+    o.appendChild(t);
+    if (isKey || isMine){
+      var badge = el("span","mono");
+      badge.style.fontSize = ".64rem"; badge.style.flex = "none"; badge.style.paddingTop = "3px";
+      badge.style.color = isKey ? "var(--pass)" : "var(--fail)";
+      badge.textContent = isKey ? (isMine ? "KEY · YOURS" : "KEY") : "YOURS";
+      o.appendChild(badge);
+    }
+    opts.appendChild(o);
+  });
+  wrap.appendChild(opts);
+
+  var foot = el("div","ifoot");
+  foot.appendChild(el("span","", q.c == null ? "no vote data" : q.c + "% agreed"));
+  if (q.u){
+    var a = el("a","","community discussion");
+    a.href = q.u; a.target = "_blank"; a.rel = "noopener noreferrer";
+    foot.appendChild(a);
+  }
+  if (sampler){
+    var xb = el("button","ghost","Explain this");
+    xb.style.padding = "4px 10px"; xb.style.fontSize = ".76rem";
+    var panel = null;
+    xb.onclick = function(){
+      if (panel) return;
+      xb.disabled = true; xb.textContent = "Thinking…";
+      panel = el("div","explain","");
+      wrap.appendChild(panel);
+      var prompt = "You are coaching someone for the AWS Certified Solutions Architect – Associate "
+        + "(SAA-C03) exam. Explain this question in at most 140 words.\n\n"
+        + "Question: " + q.s + "\n\n"
+        + Object.keys(q.o).sort().map(function(k){ return k + ". " + q.o[k]; }).join("\n")
+        + "\n\nThe community's answer is " + q.a.split("").join(" and ") + ".\n\n"
+        + "Say why that answer wins and name the specific flaw in each of the others. "
+        + "If you think the community's answer is wrong, say so plainly and give the right one. "
+        + "Plain prose, no headings, no bullet lists.";
+      sampler(prompt, { onText: function(u){ panel.textContent = u.text; } })
+        .then(function(res){ panel.textContent = res.text; xb.textContent = "Explained"; })
+        .catch(function(e){
+          panel.textContent = e && e.code === "not_granted"
+            ? "Explanations need your permission in the prompt that appears."
+            : "Could not fetch an explanation just now.";
+          xb.disabled = false; xb.textContent = "Try again";
+          panel = null;
+        });
+    };
+    foot.appendChild(xb);
+  }
+  wrap.appendChild(foot);
+  return wrap;
+}
+
+/* ---------- chrome ---------- */
+document.getElementById("themeBtn").onclick = function(){
+  var root = document.documentElement;
+  var now = root.getAttribute("data-theme");
+  var dark = now ? now === "dark"
+    : window.matchMedia("(prefers-color-scheme: dark)").matches;
+  root.setAttribute("data-theme", dark ? "light" : "dark");
+};
+homeBtn.onclick = function(){
+  if (window.confirm("Leave this paper? Your progress is saved and you can resume it.")){
+    stopTicker(); saveRun(); run = null; render();
+  }
+};
+document.addEventListener("keydown", function(e){
+  if (!run || e.metaKey || e.ctrlKey || e.altKey) return;
+  var tag = (e.target.tagName || "").toLowerCase();
+  if (tag === "input" || tag === "textarea") return;
+  var q = QS[run.ids[run.idx]];
+  var k = e.key.toUpperCase();
+  if (k >= "A" && k <= "H" && q.o[k]){ e.preventDefault(); choose(q, k); return; }
+  if (e.key === "ArrowRight"){ e.preventDefault(); go(run.idx+1); }
+  else if (e.key === "ArrowLeft"){ e.preventDefault(); go(run.idx-1); }
+  else if (k === "F"){
+    e.preventDefault();
+    if (run.flags[q.i]) delete run.flags[q.i]; else run.flags[q.i] = 1;
+    saveRun(); render();
+  }
+});
+window.addEventListener("beforeunload", saveRun);
+
+render();
+})();
+</script>

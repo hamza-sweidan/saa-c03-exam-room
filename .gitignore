@@ -1,0 +1,8 @@
+# Source dump: large, and not ours to redistribute. Keep it local.
+*.pdf
+
+# Derived during the build
+data/embed.json
+__pycache__/
+*.pyc
+.venv/
