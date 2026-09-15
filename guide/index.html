@@ -1,0 +1,342 @@
+<meta charset="utf-8">
+<title>SAA-C03 Trigger Atlas</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@500;600;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --ground:#F2F5F4; --surface:#FFFFFF; --surface-2:#E9EFED;
+  --ink:#0E1B1A; --muted:#51625F; --faint:#7C8E8B;
+  --rule:#D6E0DE; --rule-strong:#B9C8C5;
+  --accent:#0B6E68; --accent-soft:#D7EAE8; --accent-ink:#FFFFFF;
+  --flag:#9A5A06; --flag-soft:#F6EAD6;
+  --code-bg:#E4ECEA;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0B1413; --surface:#131F1E; --surface-2:#1B2827;
+    --ink:#E4ECEA; --muted:#A1B3B0; --faint:#71847F;
+    --rule:#22302E; --rule-strong:#33443F;
+    --accent:#39B3AA; --accent-soft:#0F2E2C; --accent-ink:#05201E;
+    --flag:#DFA451; --flag-soft:#2E2415;
+    --code-bg:#1F2E2C;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0B1413; --surface:#131F1E; --surface-2:#1B2827;
+  --ink:#E4ECEA; --muted:#A1B3B0; --faint:#71847F;
+  --rule:#22302E; --rule-strong:#33443F;
+  --accent:#39B3AA; --accent-soft:#0F2E2C; --accent-ink:#05201E;
+  --flag:#DFA451; --flag-soft:#2E2415;
+  --code-bg:#1F2E2C;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; background:var(--ground); color:var(--ink);
+  font:400 15px/1.55 "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:2.1rem;font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.6rem;font-weight:700}
+h3{font-size:1.02rem;font-weight:600;display:flex;align-items:baseline;gap:10px}
+p{margin:0}
+a{color:var(--accent)}
+code{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.84em;background:var(--code-bg);padding:.05em .35em;border-radius:2px;white-space:nowrap}
+.mono{font-family:"IBM Plex Mono",ui-monospace,monospace;font-variant-numeric:tabular-nums}
+.eyebrow{font-family:"IBM Plex Mono",monospace;font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+
+/* ---------- top bar ---------- */
+.top{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--rule)}
+.top-in{max-width:1340px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;gap:14px 22px;flex-wrap:wrap}
+.brand{display:flex;flex-direction:column;gap:1px;margin-right:auto}
+.brand b{font-family:"IBM Plex Sans Condensed",sans-serif;font-size:1.14rem;font-weight:700}
+.brand span{font-family:"IBM Plex Mono",monospace;font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--faint)}
+.search{flex:1 1 300px;max-width:520px;display:flex;align-items:center;gap:10px;border:1px solid var(--rule-strong);border-radius:2px;background:var(--ground);padding:0 10px}
+.search:focus-within{border-color:var(--accent)}
+.search label{font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);white-space:nowrap}
+.search input{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font:inherit;padding:8px 0;outline:none}
+.search kbd{font-family:"IBM Plex Mono",monospace;font-size:.7rem;color:var(--faint);border:1px solid var(--rule-strong);border-radius:2px;padding:0 5px}
+#status{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--faint);min-width:12ch}
+
+/* ---------- shell ---------- */
+.shell{max-width:1340px;margin:0 auto;padding-inline:20px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:44px}
+.toc{position:sticky;top:62px;align-self:start;max-height:calc(100vh - 70px);overflow:auto;padding-block:30px 40px;display:flex;flex-direction:column;gap:18px}
+.toc-group{display:flex;flex-direction:column;gap:2px}
+.toc-group .eyebrow{margin-bottom:4px}
+.toc a{display:flex;justify-content:space-between;gap:10px;text-decoration:none;color:var(--muted);font-size:.9rem;padding:3px 8px;border-radius:2px}
+.toc a:hover{color:var(--ink);background:var(--surface-2)}
+.toc a.on{color:var(--ink);background:var(--accent-soft)}
+.toc a .mono{font-size:.72rem;color:var(--faint)}
+.toc a.empty{opacity:.4}
+main{min-width:0;padding-block:30px 90px}
+
+/* ---------- intro ---------- */
+.intro{display:grid;gap:14px;padding-bottom:34px}
+.intro p{color:var(--muted);max-width:68ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px 22px;font-size:.84rem;color:var(--muted)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.tested{display:grid;gap:8px;padding-top:6px}
+.tested ol{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.tested button{font:inherit;font-size:.84rem;color:var(--ink);background:var(--surface);border:1px solid var(--rule);border-radius:2px;padding:3px 9px;cursor:pointer;display:inline-flex;gap:8px;align-items:baseline}
+.tested button:hover{border-color:var(--accent)}
+.tested button .mono{font-size:.72rem;color:var(--accent)}
+
+/* ---------- sections ---------- */
+.sec{padding-block:40px 8px;border-top:1px solid var(--rule-strong);scroll-margin-top:62px}
+.sec-head{display:grid;gap:6px;max-width:74ch}
+.sec-head .lede{color:var(--muted)}
+.block{margin-top:26px;display:grid;gap:10px}
+.block h3 .n{font-family:"IBM Plex Mono",monospace;font-size:.7rem;font-weight:400;color:var(--faint)}
+.block .note{font-size:.84rem;color:var(--muted);max-width:80ch}
+
+/* the answer key: cue → answer */
+.cues{border-top:1px solid var(--rule)}
+.cue{display:grid;grid-template-columns:minmax(0,1fr) 22px minmax(0,1.15fr);gap:10px;padding:8px 2px;border-bottom:1px solid var(--rule);align-items:baseline}
+.cue .see{color:var(--muted);font-style:italic}
+.cue .arrow{font-family:"IBM Plex Mono",monospace;color:var(--accent);text-align:center}
+.cue .ans{font-weight:600}
+.cue:hover{background:var(--surface)}
+
+/* tables */
+.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:.875rem}
+th,td{padding:9px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--rule)}
+tbody tr:last-child > *{border-bottom:0}
+thead th{font-family:"IBM Plex Mono",monospace;font-size:.64rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);background:var(--surface-2);white-space:nowrap}
+tbody th{font-weight:600;font-family:"IBM Plex Sans Condensed","IBM Plex Sans",sans-serif;font-size:.95rem}
+tbody tr:hover > *{background:var(--ground)}
+.svc th{min-width:10rem}
+.svc td.not{color:var(--muted)}
+.hit{display:inline-block;margin-left:6px;font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:500;color:var(--accent);background:var(--accent-soft);border-radius:2px;padding:0 5px;vertical-align:1px;white-space:nowrap}
+
+/* traps */
+.traps{list-style:none;margin:0;padding:0;display:grid;gap:0;border-top:1px solid var(--rule)}
+.traps li{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;padding:8px 2px;border-bottom:1px solid var(--rule)}
+.traps li::before{content:"TRAP";font-family:"IBM Plex Mono",monospace;font-size:.62rem;letter-spacing:.12em;color:var(--flag);background:var(--flag-soft);border-radius:2px;padding:2px 0;text-align:center;align-self:start;margin-top:2px}
+
+#none{padding:60px 0;color:var(--muted)}
+
+@media (max-width:900px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0}
+  .toc{position:static;max-height:none;padding-block:18px 0;flex-direction:row;overflow-x:auto;gap:14px;border-bottom:1px solid var(--rule);padding-bottom:12px}
+  .toc-group{flex-direction:row;align-items:center;gap:4px;flex:none}
+  .toc-group .eyebrow{display:none}
+  .toc a{white-space:nowrap;border:1px solid var(--rule);background:var(--surface)}
+  .toc a .mono{display:none}
+  .sec{scroll-margin-top:110px}
+}
+@media (max-width:560px){
+  h1{font-size:1.7rem}
+  .cue{grid-template-columns:minmax(0,1fr);gap:2px}
+  .cue .arrow{display:none}
+  .cue .ans::before{content:"→ ";color:var(--accent);font-family:"IBM Plex Mono",monospace}
+  .search kbd{display:none}
+}
+@media print{
+  .top,.toc{display:none}
+  .shell{display:block}
+  .sec{break-inside:auto}
+  .tbl{overflow:visible}
+  table{min-width:0!important}
+}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand"><b>SAA-C03 Trigger Atlas</b><span>Exam eve · every service, one page</span></div>
+    <div class="search">
+      <label for="q">Filter</label>
+      <input id="q" type="search" placeholder="NAT gateway, Deep Archive, “least overhead”…" autocomplete="off" spellcheck="false">
+      <kbd>/</kbd>
+    </div>
+    <div id="status" class="mono" aria-live="polite"></div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="toc" id="toc" aria-label="Sections"></nav>
+  <main id="main">
+    <div class="intro">
+      <div class="eyebrow">AWS Certified Solutions Architect – Associate</div>
+      <h1>See the phrase, name the service</h1>
+      <p>Each section opens with the phrases that give an answer away, then every service in that area in a line or two, then side-by-side tables for the ones that look alike, then the traps. Type in the filter to cut the whole page down to one topic.</p>
+      <div class="legend">
+        <span><span class="hit">×57</span> correct answer in 57 of your 1,004 bank questions</span>
+        <span><span class="mono" style="color:var(--accent)">→</span> the answer to pick</span>
+      </div>
+      <div class="tested">
+        <div class="eyebrow">Most often the right answer in your bank</div>
+        <ol id="tested"></ol>
+      </div>
+    </div>
+    <div id="sections"></div>
+    <p id="none" hidden>Nothing matches that filter. Try a service name or a word from the question, like “archive” or “static IP”.</p>
+  </main>
+</div>
+
+<script src="g1.js"></script>
+<script src="g2.js"></script>
+<script src="g3.js"></script>
+<script src="g4.js"></script>
+<script src="g5.js"></script>
+<script src="g6.js"></script>
+<script src="g7.js"></script>
+<script>
+(function(){
+  /* how often each service appears in the voted correct answer across the bank */
+  var HITS = {"S3":228,"EC2":125,"Lambda":107,"RDS":83,"Auto Scaling":77,"ALB":57,"CloudFront":49,"DynamoDB":48,"SQS":48,"Aurora":44,"Multi-AZ":38,"KMS":36,"ECS":32,"S3 Lifecycle":31,"API Gateway":29,"Fargate":27,"IAM role":27,"EBS":26,"EFS":26,"CloudWatch":24,"SNS":23,"Read replica":23,"Security group":22,"EventBridge":22,"Organizations/SCP":21,"NLB":20,"Storage Gateway":20,"Athena":20,"Route 53":18,"WAF":18,"VPC endpoint gateway":17,"ElastiCache":16,"Global Accelerator":16,"Glue":16,"AWS Backup":14,"Firehose":14,"DataSync":14,"FSx Windows":13,"Deep Archive":13,"Secrets Manager":13,"EKS":12,"Direct Connect":12,"Systems Manager":12,"Snowball/Snow":12,"ACM":12,"DMS":11,"S3 Standard-IA":11,"S3 Intelligent-Tiering":11,"Spot":10,"VPC endpoint interface":10,"SQS FIFO":10,"Config":10,"Aurora Serverless":10,"CloudFormation":9,"IAM Identity Center":9,"Savings Plans":9,"Kinesis Data Streams":9,"S3 Object Lock":9,"RDS Proxy":9,"NAT gateway":8,"Cognito":8,"Transfer Family":8,"Reserved Instances":8,"CloudTrail":7,"QuickSight":7,"Shield":7,"FSx Lustre":7,"Site-to-Site VPN":6,"io2/io1":6,"VPC peering":6,"FSx ONTAP":6,"Aurora Global":6,"Comprehend":6,"Redshift":5,"Control Tower":5,"Cost Explorer":5,"Elastic Beanstalk":5,"presigned URL":5,"Step Functions":5,"SCT":5,"S3 replication":5,"Placement group":5,"Macie":5,"Kinesis Data Analytics/Flink":5,"DAX":5,"Compute Optimizer":5,"Budgets":5,"Lake Formation":4,"Session Manager":4,"Batch":4,"S3 Transfer Acceleration":4,"S3 Access Points":4,"DynamoDB Global Tables":4,"Directory Service":4,"SageMaker":3,"Outposts":3,"OpenSearch":3,"NACL":3,"EMR":3,"gp3":3,"Transit Gateway":3,"Transcribe":3,"Security Hub":3,"SES":3,"Neptune":3,"Inspector":3,"GuardDuty":3,"Glacier Instant":3,"AppFlow":3,"Amazon MQ":3,"Internet gateway":2,"Trusted Advisor":2,"Textract":2,"MSK":2,"Service Catalog":2,"Rekognition":2,"RAM":2,"Network Firewall":2,"Glacier Flexible":2,"Gateway Load Balancer":2,"ECR":2,"Capacity Reservation":2,"NAT instance":1,"Cost and Usage Report":1,"VPC Flow Logs":1,"Parameter Store":1,"Instance store":1,"Bastion":1,"X-Ray":1,"Translate":1,"Route 53 Resolver":1,"QLDB":1,"Migration Hub/Discovery":1,"MGN":1,"Local Zones/Wavelength":1,"Firewall Manager":1,"Egress-only IGW":1,"DynamoDB Streams":1,"DocumentDB":1,"Client VPN":1,"Amplify":1};
+
+  var GROUPS = [
+    ["Exam technique", ["reading", "missed"]],
+    ["Compute", ["compute", "serverless"]],
+    ["Storage", ["s3", "blockfile", "transfer"]],
+    ["Databases", ["databases"]],
+    ["Networking", ["vpc", "edge", "hybrid-net"]],
+    ["Security", ["iam", "crypto", "detect"]],
+    ["Integration & operations", ["integration", "analytics", "management", "ai"]]
+  ];
+
+  var byId = {};
+  (window.GUIDE || []).forEach(function(s){ byId[s.id] = s; });
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]; }); }
+  function md(s){ return esc(s).replace(/`([^`]+)`/g, "<code>$1</code>"); }
+
+  function table(cols, rows, cls, minW){
+    var h = '<div class="tbl"><table class="' + (cls || "") + '" style="min-width:' + minW + 'px"><thead><tr>';
+    cols.forEach(function(c){ h += '<th scope="col">' + esc(c) + '</th>'; });
+    h += '</tr></thead><tbody>';
+    rows.forEach(function(r){ h += r; });
+    return h + '</tbody></table></div>';
+  }
+
+  function renderSection(s, group){
+    var h = '<section class="sec" id="' + s.id + '" data-key="' + esc((s.title + " " + group).toLowerCase()) + '">';
+    h += '<header class="sec-head"><div class="eyebrow">' + esc(group) + '</div><h2>' + esc(s.title) + '</h2>'
+      + '<p class="lede">' + md(s.lede) + '</p></header>';
+
+    if (s.triggers && s.triggers.length){
+      h += '<div class="block"><h3>When the question says <span class="n">' + s.triggers.length + '</span></h3><div class="cues">';
+      s.triggers.forEach(function(t){
+        h += '<div class="cue f"><div class="see">' + md(t[0]) + '</div><div class="arrow" aria-hidden="true">→</div><div class="ans">' + md(t[1]) + '</div></div>';
+      });
+      h += '</div></div>';
+    }
+
+    if (s.services && s.services.length){
+      var rows = s.services.map(function(v){
+        var n = v[1] && HITS[v[1]] ? '<span class="hit" title="Correct answer in ' + HITS[v[1]] + ' bank questions">×' + HITS[v[1]] + '</span>' : "";
+        return '<tr class="f"><th scope="row">' + esc(v[0]) + n + '</th><td>' + md(v[2]) + '</td><td>' + md(v[3]) + '</td><td class="not">' + md(v[4]) + '</td></tr>';
+      });
+      h += '<div class="block"><h3>Services <span class="n">' + s.services.length + '</span></h3>'
+        + table(["Service", "What it is", "Pick it when", "Don't confuse with"], rows, "svc", 820) + '</div>';
+    }
+
+    (s.compare || []).forEach(function(c){
+      var rows = c.rows.map(function(r){
+        return '<tr class="f"><th scope="row">' + md(r[0]) + '</th>' + r.slice(1).map(function(x){ return '<td>' + md(x) + '</td>'; }).join("") + '</tr>';
+      });
+      h += '<div class="block cmp" data-key="' + esc(c.title.toLowerCase()) + '"><h3>' + esc(c.title) + '</h3>'
+        + table(c.cols, rows, "", Math.max(480, c.cols.length * 150))
+        + (c.note ? '<p class="note">' + md(c.note) + '</p>' : "") + '</div>';
+    });
+
+    if (s.traps && s.traps.length){
+      h += '<div class="block"><h3>Traps <span class="n">' + s.traps.length + '</span></h3><ul class="traps">';
+      s.traps.forEach(function(t){ h += '<li class="f">' + md(t) + '</li>'; });
+      h += '</ul></div>';
+    }
+    return h + '</section>';
+  }
+
+  /* build page */
+  var html = "", toc = "";
+  GROUPS.forEach(function(g){
+    var links = "";
+    g[1].forEach(function(id){
+      var s = byId[id];
+      if (!s) return;
+      html += renderSection(s, g[0]);
+      links += '<a href="#' + id + '" data-for="' + id + '"><span>' + esc(s.title) + '</span><span class="mono"></span></a>';
+    });
+    if (links) toc += '<div class="toc-group"><div class="eyebrow">' + esc(g[0]) + '</div>' + links + '</div>';
+  });
+  document.getElementById("sections").innerHTML = html;
+  document.getElementById("toc").innerHTML = toc;
+
+  /* most-tested strip */
+  var tested = Object.keys(HITS).sort(function(a, b){ return HITS[b] - HITS[a]; }).slice(0, 16);
+  var term = { "Organizations/SCP": "service control policy", "Multi-AZ": "Multi-AZ", "IAM role": "IAM role", "S3 Lifecycle": "Lifecycle", "Read replica": "read replica", "Security group": "security group" };
+  document.getElementById("tested").innerHTML = tested.map(function(k){
+    return '<li><button type="button" data-q="' + esc(term[k] || k) + '">' + esc(k) + ' <span class="mono">×' + HITS[k] + '</span></button></li>';
+  }).join("");
+
+  /* filter */
+  var input = document.getElementById("q"), status = document.getElementById("status"), none = document.getElementById("none");
+  var secs = [].slice.call(document.querySelectorAll(".sec"));
+  secs.forEach(function(sec){
+    [].slice.call(sec.querySelectorAll(".f")).forEach(function(el){ el.dataset.text = el.textContent.toLowerCase(); });
+  });
+  var total = document.querySelectorAll(".sec .f").length;
+
+  function apply(){
+    var words = input.value.toLowerCase().trim().split(/\s+/).filter(Boolean);
+    var shown = 0, anySec = false;
+    function hit(text){ return words.every(function(w){ return text.indexOf(w) !== -1; }); }
+    secs.forEach(function(sec){
+      var whole = words.length === 0 || hit(sec.dataset.key);
+      var count = 0;
+      [].slice.call(sec.querySelectorAll(".block")).forEach(function(b){
+        var blockWhole = whole || (b.dataset.key && hit(b.dataset.key));
+        var n = 0;
+        [].slice.call(b.querySelectorAll(".f")).forEach(function(el){
+          var ok = blockWhole || hit(el.dataset.text);
+          el.hidden = !ok;
+          if (ok) n++;
+        });
+        b.hidden = n === 0;
+        count += n;
+      });
+      sec.hidden = count === 0;
+      if (count) anySec = true;
+      shown += count;
+      var link = document.querySelector('.toc a[data-for="' + sec.id + '"]');
+      if (link){
+        link.querySelector(".mono").textContent = words.length ? count : "";
+        link.classList.toggle("empty", count === 0);
+      }
+    });
+    none.hidden = anySec;
+    status.textContent = words.length ? shown + " of " + total + " lines" : total + " lines";
+  }
+  input.addEventListener("input", apply);
+  document.getElementById("tested").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-q]");
+    if (!b) return;
+    input.value = b.dataset.q; apply();
+    window.scrollTo({ top: document.getElementById("sections").offsetTop - 70, behavior: "smooth" });
+  });
+  document.addEventListener("keydown", function(e){
+    if (e.key === "/" && document.activeElement !== input){ e.preventDefault(); input.focus(); input.select(); }
+    if (e.key === "Escape" && document.activeElement === input){ input.value = ""; apply(); }
+  });
+  apply();
+
+  /* highlight the section in view */
+  if ("IntersectionObserver" in window){
+    var links = {};
+    [].slice.call(document.querySelectorAll(".toc a")).forEach(function(a){ links[a.dataset.for] = a; });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting){
+          Object.keys(links).forEach(function(k){ links[k].classList.toggle("on", k === en.target.id); });
+        }
+      });
+    }, { rootMargin: "-70px 0px -70% 0px" });
+    secs.forEach(function(s){ io.observe(s); });
+  }
+})();
+</script>
