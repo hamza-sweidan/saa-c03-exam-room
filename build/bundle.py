@@ -19,7 +19,8 @@ def bank():
         "n": q["nsel"], "c": q["confidence"], "d": q["domain"],
         "f": q["family"], "x": q["difficulty"], "u": q.get("discussion"),
     } for q in meta["pool"]]
-    return {"e": [e["question_ids"] for e in meta["exams"]], "q": compact}
+    return {"e": [e["question_ids"] for e in meta["exams"]],
+            "l": meta.get("likely", {}).get("question_ids", []), "q": compact}
 
 
 def main():

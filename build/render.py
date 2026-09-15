@@ -8,16 +8,27 @@ EXAMS = os.path.join(HERE, "..", "exams")
 
 LETTERS = "ABCDEFGH"
 
+LIKELY_INTRO = [
+    "The 65 most recently reported questions in the bank, kept to the exam blueprint.",
+    "Each question is ranked by the newest ExamTopics discussion posted for its scenario;",
+    "the dump has no dates, so posting order is the only sign of what is still in use.",
+    "This leans toward the live pool -- it does not predict any one sitting.",
+]
 
-def render_exam(spec, pool, meta):
-    n = spec["number"]
+
+def render_exam(spec, pool, meta, title=None, intro=None):
+    n = spec.get("number")
     qs = [pool[i] for i in spec["question_ids"]]
     dn, dnum = meta["domain_names"], meta["domain_num"]
     dist = collections.Counter(q["domain"] for q in qs)
 
     L = []
-    L.append("# SAA-C03 Practice Exam %d" % n)
+    L.append("# SAA-C03 %s" % (title or "Practice Exam %d" % n))
     L.append("")
+    for line in intro or []:
+        L.append(line)
+    if intro:
+        L.append("")
     L.append("%d questions | %d minutes | passing score 720 of 1000 (about 36 of 65 correct)"
              % (len(qs), meta["time_limit_min"]))
     L.append("")
@@ -42,7 +53,7 @@ def render_exam(spec, pool, meta):
 
     L.append("---")
     L.append("")
-    L.append("## Answer key -- Exam %d" % n)
+    L.append("## Answer key -- %s" % (title or "Exam %d" % n))
     L.append("")
     L.append("`Consensus` is the share of ExamTopics voters choosing that answer. Anything")
     L.append("below 70% is genuinely contested -- open the discussion link before trusting it.")
@@ -106,6 +117,9 @@ def render_readme(meta, pool, exams):
     L.append("")
     for e in exams:
         L.append("- [Practice Exam %d](exam-%02d.md)" % (e["number"], e["number"]))
+    if meta.get("likely"):
+        L.append("- [Most likely](most-likely.md) -- the 65 most recently reported questions, "
+                 "same blueprint, no difficulty quota")
     L.append("")
     L.append("## Rebuilding")
     L.append("")
@@ -113,6 +127,7 @@ def render_readme(meta, pool, exams):
     L.append("python build/extract.py    # PDF -> data/questions.json")
     L.append("python build/classify.py   # add domain labels -> data/classified.json")
     L.append("python build/assemble.py   # pick and order the papers -> data/exams.json")
+    L.append("python build/likely.py     # add the most-likely paper -> data/exams.json")
     L.append("python build/render.py     # write exams/*.md")
     L.append("```")
     L.append("")
@@ -133,6 +148,11 @@ def main():
     for spec in meta["exams"]:
         path = os.path.join(EXAMS, "exam-%02d.md" % spec["number"])
         io.open(path, "w", encoding="utf-8").write(render_exam(spec, pool, meta))
+        print("wrote", path)
+    if meta.get("likely"):
+        path = os.path.join(EXAMS, "most-likely.md")
+        io.open(path, "w", encoding="utf-8").write(
+            render_exam(meta["likely"], pool, meta, title="Most Likely Paper", intro=LIKELY_INTRO))
         print("wrote", path)
     readme = os.path.join(EXAMS, "README.md")
     io.open(readme, "w", encoding="utf-8").write(render_readme(meta, meta["pool"], meta["exams"]))

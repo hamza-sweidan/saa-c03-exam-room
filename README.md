@@ -37,6 +37,15 @@ Difficulty is drawn from how strongly the community agreed on each answer, split
 37 straightforward, 20 moderate and 8 contested on every paper, so scores are
 comparable across all six. The 390 questions used never repeat between papers.
 
+## The most likely paper
+
+A seventh paper, `exams/most-likely.md` and the first card in the simulator,
+holds the 65 most recently reported questions, still at 19/17/16/13 with 7
+choose-two and 1 choose-three. The dump has no dates, so recency comes from the
+ExamTopics discussion id on each question, which rises in posting order; a
+scenario reported again later takes the newer id. It leans toward the part of
+the bank least likely to have been retired. It does not predict any one sitting.
+
 ## Rebuilding
 
 The source PDF is deliberately not committed. Point the first step at your own
@@ -47,6 +56,7 @@ pip install pypdf
 python build/extract.py "path/to/SAA-C03 dump.pdf"   # -> data/questions.json
 python build/classify.py                             # -> data/classified.json
 python build/assemble.py                             # -> data/exams.json
+python build/likely.py                               # -> data/exams.json (most-likely paper)
 python build/render.py                               # -> exams/*.md
 python build/bundle.py                               # -> app/exam-room.html
 ```

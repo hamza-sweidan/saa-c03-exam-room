@@ -1,3 +1,4 @@
+<meta charset="utf-8">
 <title>SAA-C03 Exam Room</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
@@ -476,6 +477,12 @@ function viewHome(){
   }
 
   var papers = el("div","papers");
+  if (BANK.l && BANK.l.length){
+    var likely = paperCard("Most likely", BANK.l, -1);
+    likely.style.borderColor = "var(--accent)";
+    likely.insertBefore(el("div","meta","newest reports in the bank"), likely.children[2]);
+    papers.appendChild(likely);
+  }
   BANK.e.forEach(function(ids, i){
     papers.appendChild(paperCard("Paper " + (i+1), ids, i));
   });

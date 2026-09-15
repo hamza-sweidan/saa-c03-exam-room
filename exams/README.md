@@ -46,6 +46,7 @@ linked discussion on those rather than memorising the key.
 - [Practice Exam 4](exam-04.md)
 - [Practice Exam 5](exam-05.md)
 - [Practice Exam 6](exam-06.md)
+- [Most likely](most-likely.md) -- the 65 most recently reported questions, same blueprint, no difficulty quota
 
 ## Rebuilding
 
@@ -53,6 +54,7 @@ linked discussion on those rather than memorising the key.
 python build/extract.py    # PDF -> data/questions.json
 python build/classify.py   # add domain labels -> data/classified.json
 python build/assemble.py   # pick and order the papers -> data/exams.json
+python build/likely.py     # add the most-likely paper -> data/exams.json
 python build/render.py     # write exams/*.md
 ```
 
